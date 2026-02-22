@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Application Tracker</title>
 
+    <!-- font awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="./jobs.png" type="image/x-icon">
+
     <!-- tailwind -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -38,7 +44,62 @@
                 <p class="text-red-500 font-bold text-2xl" id="rejectedCount">0</p>
             </div>
         </div>
-    
+    </header>
+
+    <hr class="my-5">
+    <main class="w-[80%] mx-auto">
+        <div class="mb-6">
+            <button onclick="toggleStyle('all-filter-btn')" class="bg-black text-white px-5 py-2"
+                id="all-filter-btn">All</button>
+            <button onclick="toggleStyle('interview-filter-btn')" class="bg-gray-300 px-5 py-2"
+                id="thriving-filter-btn">Thriving</button>
+            <button onclick="toggleStyle('struggling-filter-btn')" class="bg-gray-300 px-5 py-2"
+                id="struggling-filter-btn">Struggling</button>
+        </div>
+
+        <!-- Filtered card -->
+
+        <section id="filtered-section" class="hidden">
+
+        </section>
+
+        <section id="allCards" class="space-y-6">
+
+            <!-- card 1 -->
+            <div class="card flex justify-between border p-8">
+                <!-- main part 1 -->
+                <div class="space-y-6">
+                    <!-- part 1 -->
+                    <div>
+                        <p class="jobName text-[18px] font-bold">Mobile First Corp</p>
+                        <p class="jobPosition text-[#64748b]">React Native Developer</p>
+                    </div>
+
+                    <!-- part 2 -->
+                    <div>
+                        <p class="text-[#64748b]">Remote
+                            •
+                            Full-time
+                            •
+                            $130,000 - $175,000</p>
+                    </div>
+                    <!-- part 3 -->
+                    <button class="status rounded px-3 py-2 w-[113px] bg-[#eef4ff]">Not Applied</button>
+                    <p class="notes">Build cross-platform mobile applications using React Native. Work on products used by millions of users worldwide.</p>
+
+                    <div class="flex gap-5">
+                        <button class="interview-btn rounded px-3 py-2 w-[100px] border border-emerald-500 text-emerald-500 font-semibold">Interview</button>
+                        <button class="rejected-btn rounded px-3 py-2 w-[100px] border border-red-500 text-red-500 font-semibold">Rejected</button>
+                    </div>
+                </div>
+
+                <!-- main part 2 -->
+                <div>
+                    <button class="btn-delete bg-red-200 text-red-600 px-4 py-2">Delete</button>
+                </div>
+            </div>
+
+ 
 </body>
 
 </html>
