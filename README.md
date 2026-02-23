@@ -8,7 +8,10 @@
 
    querySelectorAll: Similar to querySelector, this method accepts any CSS selector, but it returns all matching elements in a static NodeList. Unlike a live collection, this is a snapshot of the DOM at the moment the method was called; if the document changes later, the list will not update to include new elements or remove deleted ones.
 
-
 2. How do you create and insert a new element into the DOM?
 
    Ans: To create and insert a new element, I will first use the document.createElement() method to generate a new HTML tag in the browser's memory. After creating the element, I will define its content or properties using properties like textContent for text or className for styling. Finally, I will attach the element to the visible webpage by using an insertion method such as appendChild() or prepend(), which places the new element inside a specified parent element in the DOM tree.
+
+3. What is Event Bubbling? And how does it work?
+
+   Ans: Event Bubbling is a type of event propagation in the HTML DOM where an event starts from the specific element that was clicked and then bubbles up to its parent elements in order. When an event occurs on an element, the browser first runs the handlers on that element, then on its parent, then all the way up to the ancestors and the window object. This behavior allows a single parent element to listen for and handle events that happen on any of its children, a technique commonly known as event delegation.
