@@ -15,31 +15,52 @@ const rejectedFilterBtn = document.getElementById('rejected-filter-btn');
 const allCardSection = document.getElementById('allCards');
 const filterSection = document.getElementById('filtered-section');
 const mainContainer = document.querySelector('main');
+const mainElement = document.querySelector('main');   // for bottom padding
 
 function calculateCount() {
-    const currentTotal = allCardSection.children.length;
-
-    total.innerText = currentTotal;
-    availableJobsCount.innerText = `${currentTotal} jobs`;
+    const totalCards = allCardSection.children.length;
+    
+    total.innerText = totalCards;
+    availableJobsCount.innerText = `${totalCards} jobs`;
     interviewCount.innerText = interviewList.length;
     rejectedCount.innerText = rejectedList.length;
 
-    // Empty State Logic
-    if (currentTotal === 0) {
-        allCardSection.classList.add('hidden');
-        filterSection.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-    } else {
-        emptyState.classList.add('hidden');
-        if (currentStatus === 'all-filter-btn') {
+    updateView();   // ← decides what to show (cards or empty state)
+}
+
+function updateView() {
+    // Hide everything first
+    allCardSection.classList.add('hidden');
+    filterSection.classList.add('hidden');
+    emptyState.classList.add('hidden');
+
+    if (currentStatus === 'all-filter-btn') {
+        if (allCardSection.children.length === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
             allCardSection.classList.remove('hidden');
+        }
+    } 
+    else if (currentStatus === 'interview-filter-btn') {
+        if (interviewList.length === 0) {
+            emptyState.classList.remove('hidden');
         } else {
             filterSection.classList.remove('hidden');
+            renderInterview();
+        }
+    } 
+    else if (currentStatus === 'rejected-filter-btn') {
+        if (rejectedList.length === 0) {
+            emptyState.classList.remove('hidden');
+        } else {
+            filterSection.classList.remove('hidden');
+            renderRejected();
         }
     }
 }
 
-calculateCount();
+// Add bottom padding to the whole page (so content never sticks to the bottom)
+mainElement.classList.add('pb-24');
 
 // ==================== TOGGLE FILTER BUTTONS ====================
 function toggleStyle(id) {
@@ -62,19 +83,12 @@ function toggleStyle(id) {
 
     // show/hide sections
     if (id === 'interview-filter-btn') {
-        allCardSection.classList.add('hidden');
-        filterSection.classList.remove('hidden');
         renderInterview();
-    } else if (id === 'all-filter-btn') {
-        allCardSection.classList.remove('hidden');
-        filterSection.classList.add('hidden');
     } else if (id === 'rejected-filter-btn') {
-        allCardSection.classList.add('hidden');
-        filterSection.classList.remove('hidden');
         renderRejected();
     }
 
-    calculateCount();   // ← checks for empty state after filter change
+    calculateCount();   // this will call updateView()
 }
 
 // ==================== EVENT DELEGATION ====================
@@ -242,3 +256,6 @@ function renderRejected() {
         filterSection.appendChild(div);
     }
 }
+
+// Initial call
+calculateCount();
