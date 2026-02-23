@@ -23,9 +23,17 @@ function calculateCount() {
     const totalCards = allCardSection.children.length;
 
     total.innerText = totalCards;
-    availableJobsCount.innerText = `${totalCards} jobs`;
     interviewCount.innerText = interviewList.length;
     rejectedCount.innerText = rejectedList.length;
+
+    // tab wise count
+    let countText = `${totalCards} jobs`;
+    if (currentStatus === 'interview-filter-btn') {
+        countText = `${interviewList.length} out of ${totalCards} jobs`;
+    } else if (currentStatus === 'rejected-filter-btn') {
+        countText = `${rejectedList.length} out of ${totalCards} jobs`;
+    }
+    availableJobsCount.innerText = countText;
 
     updateView();
 }
@@ -100,24 +108,15 @@ mainContainer.addEventListener('click', function (event) {
         parenNode.querySelector('.status').innerText = 'Interview';
         parenNode.querySelector('.status').className = 'status rounded px-3 py-2 w-[113px] bg-emerald-100 text-emerald-700 font-medium';
 
-        const cardInfo = {
-            jobName,
-            jobPosition,
-            details,
-            status: 'Interview',
-            notes
-        };
+        const cardInfo = { jobName, jobPosition, details, status: 'Interview', notes };
 
-        const jobExist = interviewList.find(item => item.jobName === cardInfo.jobName);
-        if (!jobExist) {
+        if (!interviewList.find(item => item.jobName === cardInfo.jobName)) {
             interviewList.push(cardInfo);
         }
 
         rejectedList = rejectedList.filter(item => item.jobName !== cardInfo.jobName);
 
-        if (currentStatus === 'rejected-filter-btn') {
-            renderRejected();
-        }
+        if (currentStatus === 'rejected-filter-btn') renderRejected();
         calculateCount();
 
     } else if (event.target.classList.contains('rejected-btn')) {
@@ -131,24 +130,15 @@ mainContainer.addEventListener('click', function (event) {
         parenNode.querySelector('.status').innerText = 'Rejected';
         parenNode.querySelector('.status').className = 'status rounded px-3 py-2 w-[113px] bg-red-100 text-red-700 font-medium';
 
-        const cardInfo = {
-            jobName,
-            jobPosition,
-            details,
-            status: 'Rejected',
-            notes
-        };
+        const cardInfo = { jobName, jobPosition, details, status: 'Rejected', notes };
 
-        const jobExist = rejectedList.find(item => item.jobName === cardInfo.jobName);
-        if (!jobExist) {
+        if (!rejectedList.find(item => item.jobName === cardInfo.jobName)) {
             rejectedList.push(cardInfo);
         }
 
         interviewList = interviewList.filter(item => item.jobName !== cardInfo.jobName);
 
-        if (currentStatus === 'interview-filter-btn') {
-            renderInterview();
-        }
+        if (currentStatus === 'interview-filter-btn') renderInterview();
         calculateCount();
 
     } else if (event.target.closest('.btn-delete')) {
@@ -165,20 +155,16 @@ mainContainer.addEventListener('click', function (event) {
 
         card.remove();
 
-        if (currentStatus === 'interview-filter-btn') {
-            renderInterview();
-        } else if (currentStatus === 'rejected-filter-btn') {
-            renderRejected();
-        }
+        if (currentStatus === 'interview-filter-btn') renderInterview();
+        else if (currentStatus === 'rejected-filter-btn') renderRejected();
 
         calculateCount();
     }
 });
 
-// Render function
+// Render functions
 function renderInterview() {
     filterSection.innerHTML = '';
-
     for (let job of interviewList) {
         let div = document.createElement('div');
         div.className = 'card flex justify-between bg-white border border-[#d1d5db] rounded-lg p-8';
@@ -188,20 +174,14 @@ function renderInterview() {
                     <p class="jobName text-[18px] font-bold">${job.jobName}</p>
                     <p class="jobPosition text-[#64748b]">${job.jobPosition}</p>
                 </div>
-
-                <div>
-                    <p class="text-[#64748b]">${job.details}</p>
-                </div>
-
+                <div><p class="text-[#64748b]">${job.details}</p></div>
                 <button class="status rounded px-3 py-2 w-[113px] bg-emerald-100 text-emerald-700 font-medium">Interview</button>
                 <p class="notes">${job.notes}</p>
-
                 <div class="flex gap-5">
                     <button class="interview-btn rounded px-3 py-2 w-[100px] border border-emerald-500 text-emerald-500 font-semibold">Interview</button>
                     <button class="rejected-btn rounded px-3 py-2 w-[100px] border border-red-500 text-red-500 font-semibold">Rejected</button>
                 </div>
             </div>
-
             <div>
                 <button class="btn-delete border border-[#f1f2f4] rounded-full p-4 shadow-sm">
                     <i class="fa-solid fa-trash-can"></i>
@@ -214,7 +194,6 @@ function renderInterview() {
 
 function renderRejected() {
     filterSection.innerHTML = '';
-
     for (let job of rejectedList) {
         let div = document.createElement('div');
         div.className = 'card flex justify-between bg-white border border-[#d1d5db] rounded-lg p-8';
@@ -224,20 +203,14 @@ function renderRejected() {
                     <p class="jobName text-[18px] font-bold">${job.jobName}</p>
                     <p class="jobPosition text-[#64748b]">${job.jobPosition}</p>
                 </div>
-
-                <div>
-                    <p class="text-[#64748b]">${job.details}</p>
-                </div>
-
+                <div><p class="text-[#64748b]">${job.details}</p></div>
                 <button class="status rounded px-3 py-2 w-[113px] bg-red-100 text-red-700 font-medium">Rejected</button>
                 <p class="notes">${job.notes}</p>
-
                 <div class="flex gap-5">
                     <button class="interview-btn rounded px-3 py-2 w-[100px] border border-emerald-500 text-emerald-500 font-semibold">Interview</button>
                     <button class="rejected-btn rounded px-3 py-2 w-[100px] border border-red-500 text-red-500 font-semibold">Rejected</button>
                 </div>
             </div>
-
             <div>
                 <button class="btn-delete border border-[#f1f2f4] rounded-full p-4 shadow-sm">
                     <i class="fa-solid fa-trash-can"></i>
@@ -248,5 +221,5 @@ function renderRejected() {
     }
 }
 
-// Initial load
+// Initial count
 calculateCount();
