@@ -6,6 +6,7 @@ const total = document.getElementById('total');
 const interviewCount = document.getElementById('interviewCount');
 const rejectedCount = document.getElementById('rejectedCount');
 const availableJobsCount = document.getElementById('availableJobsCount');
+const emptyState = document.getElementById('empty-state');
 
 const allFilterBtn = document.getElementById('all-filter-btn');
 const interviewFilterBtn = document.getElementById('interview-filter-btn');
@@ -17,10 +18,25 @@ const mainContainer = document.querySelector('main');
 
 function calculateCount() {
     const currentTotal = allCardSection.children.length;
+
     total.innerText = currentTotal;
+    availableJobsCount.innerText = `${currentTotal} jobs`;
     interviewCount.innerText = interviewList.length;
     rejectedCount.innerText = rejectedList.length;
-    availableJobsCount.innerText = `${currentTotal} jobs`;   // ← this one line is new
+
+    // Empty State Logic
+    if (currentTotal === 0) {
+        allCardSection.classList.add('hidden');
+        filterSection.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+    } else {
+        emptyState.classList.add('hidden');
+        if (currentStatus === 'all-filter-btn') {
+            allCardSection.classList.remove('hidden');
+        } else {
+            filterSection.classList.remove('hidden');
+        }
+    }
 }
 
 calculateCount();
@@ -57,6 +73,8 @@ function toggleStyle(id) {
         filterSection.classList.remove('hidden');
         renderRejected();
     }
+
+    calculateCount();   // ← checks for empty state after filter change
 }
 
 // ==================== EVENT DELEGATION ====================
@@ -124,7 +142,6 @@ mainContainer.addEventListener('click', function (event) {
         }
         calculateCount();
 
-        // ==================== DELETE FUNCTIONALITY (NEW) ====================
     } else if (event.target.closest('.btn-delete')) {
         const card = event.target.closest('.card');
         const jobName = card.querySelector('.jobName').innerText;
@@ -133,16 +150,16 @@ mainContainer.addEventListener('click', function (event) {
         interviewList = interviewList.filter(item => item.jobName !== jobName);
         rejectedList = rejectedList.filter(item => item.jobName !== jobName);
 
-        // Remove the original card from All view (if it still exists)
+        // Remove original card from All view
         const allCardToDelete = Array.from(allCardSection.children).find(c =>
             c.querySelector('.jobName') && c.querySelector('.jobName').innerText === jobName
         );
         if (allCardToDelete) allCardToDelete.remove();
 
-        // Remove the clicked card immediately
+        // Remove the clicked card
         card.remove();
 
-        // Re-render current filtered view if we are in one
+        // Re-render if we are in filtered view
         if (currentStatus === 'interview-filter-btn') {
             renderInterview();
         } else if (currentStatus === 'rejected-filter-btn') {
@@ -153,7 +170,7 @@ mainContainer.addEventListener('click', function (event) {
     }
 });
 
-// ==================== RENDER FUNCTIONS (unchanged) ====================
+// ==================== RENDER FUNCTIONS ====================
 function renderInterview() {
     filterSection.innerHTML = '';
 
