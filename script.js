@@ -5,6 +5,7 @@ let currentStatus = 'all';
 const total = document.getElementById('total');
 const interviewCount = document.getElementById('interviewCount');
 const rejectedCount = document.getElementById('rejectedCount');
+const availableJobsCount = document.getElementById('availableJobsCount');
 
 const allFilterBtn = document.getElementById('all-filter-btn');
 const interviewFilterBtn = document.getElementById('interview-filter-btn');
@@ -15,9 +16,11 @@ const filterSection = document.getElementById('filtered-section');
 const mainContainer = document.querySelector('main');
 
 function calculateCount() {
-    total.innerText = allCardSection.children.length;
+    const currentTotal = allCardSection.children.length;
+    total.innerText = currentTotal;
     interviewCount.innerText = interviewList.length;
     rejectedCount.innerText = rejectedList.length;
+    availableJobsCount.innerText = `${currentTotal} jobs`;   // ← this one line is new
 }
 
 calculateCount();
@@ -121,7 +124,7 @@ mainContainer.addEventListener('click', function (event) {
         }
         calculateCount();
 
-    // ==================== DELETE FUNCTIONALITY (NEW) ====================
+        // ==================== DELETE FUNCTIONALITY (NEW) ====================
     } else if (event.target.closest('.btn-delete')) {
         const card = event.target.closest('.card');
         const jobName = card.querySelector('.jobName').innerText;
@@ -131,7 +134,7 @@ mainContainer.addEventListener('click', function (event) {
         rejectedList = rejectedList.filter(item => item.jobName !== jobName);
 
         // Remove the original card from All view (if it still exists)
-        const allCardToDelete = Array.from(allCardSection.children).find(c => 
+        const allCardToDelete = Array.from(allCardSection.children).find(c =>
             c.querySelector('.jobName') && c.querySelector('.jobName').innerText === jobName
         );
         if (allCardToDelete) allCardToDelete.remove();
